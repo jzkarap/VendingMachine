@@ -12,10 +12,7 @@ namespace VendingMachine.Items
 			this.Name = name;
 			this.Cost = cost;
 			this.Type = type;
-			//this.Count = 5;
 		}
-
-		//public int Count { get; }
 
 		public string Name { get; }
 

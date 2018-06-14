@@ -26,8 +26,14 @@ namespace VendingMachine.VendingMachine
 
 		public decimal Charge(decimal costOfItem)
 		{
-			Balance -= costOfItem;
-
+			if (Balance - costOfItem > 0)
+			{
+				Balance -= costOfItem;
+			}
+			else
+			{
+				Console.WriteLine("Your balance isn't high enough to complete purchase.");
+			}
 			return Balance;
 		}
 

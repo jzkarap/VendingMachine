@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using VendingMachine.Items;
+using VendingMachine.UI;
 using VendingMachine.VendingMachine;
 
 namespace VendingMachine
@@ -11,30 +12,30 @@ namespace VendingMachine
 	{
 		static void Main(string[] args)
 		{
-			TransactionRecorder();
+			Dictionary<string, Stack<Item>> stock = GetItems();
+
 			CashCounter cashCounter = new CashCounter();
 
 			// Creates a group of items to be purchased
 			Stack<Item> purchases = new Stack<Item>();
 
-			// Calls method to build machine
-			GetItems();
-			
-			// Position/amount testing
-			foreach (var kvp in GetItems())
-			{
-				Console.WriteLine(kvp.Key + " " + kvp.Value.Pop().Name);
-			}
 			// Transaction testing
-			Console.WriteLine("Testing initial balance: " + cashCounter.Balance);
-			cashCounter.Feed((decimal)5.05);
-			cashCounter.Charge(GetItems()["A1"].Pop().Cost);
-			Console.WriteLine($"Testing updated balance: {cashCounter.Balance:c}");
-			Console.WriteLine(cashCounter.GetChange());
-			Console.WriteLine($"{cashCounter.Balance:c}");
+			//Console.WriteLine("Testing initial balance: " + cashCounter.Balance);
+			//cashCounter.Feed((decimal)5.05);
+			//cashCounter.Charge(stock["A1"].Pop().Cost);
+			//cashCounter.Charge(stock["A1"].Pop().Cost);
+			//cashCounter.Charge(stock["A1"].Pop().Cost);
+			//cashCounter.Charge(stock["A1"].Pop().Cost);
+			//cashCounter.Charge(stock["A1"].Pop().Cost);
+			//Console.WriteLine($"Testing updated balance: {cashCounter.Balance:c}");
+			//Console.WriteLine(cashCounter.GetChange());
+			//Console.WriteLine($"{cashCounter.Balance:c}");
+			//Console.WriteLine();
 
+			Menu main = new Menu(stock, cashCounter);
+
+			// Testing transaction recorder
 			TransactionRecorder();
-			
 		}
 
 		/// <summary>
@@ -87,7 +88,10 @@ namespace VendingMachine
 
 			return slots;
 		}
-
+		
+		/// <summary>
+		/// BROKEN
+		/// </summary>
 		static void TransactionRecorder()
 		{
 			using (StreamWriter recorder = new StreamWriter("log.txt", true))

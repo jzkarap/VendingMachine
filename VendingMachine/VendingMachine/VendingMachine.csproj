@@ -6,10 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="UI\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="inventory.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -27,22 +27,22 @@ namespace VendingMachine.Items
 
 			if (this.Type == "Chip")
 			{
-				noise = "Crunch, Crunch, Yum!";
+				noise = "Crunch, Crunch, Yum!\n";
 			}
 
 			if (this.Type == "Candy")
 			{
-				noise = "Munch, Munch, Yum!";
+				noise = "Munch, Munch, Yum!\n";
 			}
 
 			if (this.Type == "Gum")
 			{
-				noise = "Chew, Chew, Yum!";
+				noise = "Chew, Chew, Yum!\n";
 			}
 
 			if (this.Type == "Drink")
 			{
-				noise = "Glug, Glug, Yum!";
+				noise = "Glug, Glug, Yum!\n";
 			}
 
 			return noise;

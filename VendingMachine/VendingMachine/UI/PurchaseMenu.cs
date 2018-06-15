@@ -61,7 +61,7 @@ namespace VendingMachine.UI
 				{
 					if (kvp.Value.Count > 0)
 					{
-						Console.WriteLine($"{kvp.Key} {kvp.Value.Peek().Name} {kvp.Value.Peek().Cost:c}");
+						Console.WriteLine($"{kvp.Key} {kvp.Value.Peek().Name}".PadRight(25) + $"{kvp.Value.Peek().Cost:c}");
 					}
 					else
 					{
@@ -86,7 +86,7 @@ namespace VendingMachine.UI
 
 			if (userInput == "3")
 			{
-				Console.WriteLine(currentCounter.GetChange(currentCounter));
+				Console.WriteLine(currentCounter.GetChange());
 				Console.WriteLine();
 				Console.Write(".");
 				Thread.Sleep(300);

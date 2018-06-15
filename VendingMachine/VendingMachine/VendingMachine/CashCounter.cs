@@ -78,9 +78,9 @@ namespace VendingMachine.VendingMachine
 			return purchases;
 		}
 
-		public string GetChange(CashCounter currentCounter)
+		public string GetChange()
 		{
-			decimal balanceBeforeChange = -(currentCounter.Balance);
+			decimal balanceBeforeChange = -(Balance);
 
 			quarterCount = (int)(Balance / (decimal).25);
 			Balance  %= (decimal).25;
@@ -103,7 +103,7 @@ namespace VendingMachine.VendingMachine
 		{
 			using (StreamWriter recorder = new StreamWriter("log.txt", true))
 			{
-				recorder.WriteLine(DateTime.Now.ToString() + " " + eventType + "\t\t" + $"{Balance - cashDelta:c}" + "\t" + $"{Balance:c}");
+				recorder.WriteLine(DateTime.Now.ToString() + " "  + eventType.PadRight(25) + " " + $"{Balance - cashDelta:c}".PadRight(10) + " " + $"{Balance:c}");
 			}
 		}
 

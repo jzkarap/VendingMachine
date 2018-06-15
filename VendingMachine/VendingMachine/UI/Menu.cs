@@ -8,7 +8,7 @@ namespace VendingMachine.UI
 {
 	public class Menu
 	{
-		public Menu(Dictionary<string, Stack<Item>> slots, CashCounter currentCounter, Queue<Item> purchases, Vendor machine)
+		public Menu(Dictionary<string, Stack<Item>> slots, CashCounter cashCounter, Queue<Item> purchases)
 		{
 			Console.WriteLine("(1) Display Vending Machine Items");
 			Console.WriteLine("(2) Purchase");
@@ -23,11 +23,11 @@ namespace VendingMachine.UI
 			}
 			if (userInput == "1")
 			{
-				DisplayItems items = new DisplayItems(slots, currentCounter, purchases, machine);
+				DisplayItems items = new DisplayItems(slots, cashCounter, purchases);
 			}
 			if (userInput == "2")
 			{
-				PurchaseMenu purchase = new PurchaseMenu(slots, currentCounter, purchases, machine);
+				PurchaseMenu purchase = new PurchaseMenu(slots, cashCounter, purchases);
 			}
 		}
 

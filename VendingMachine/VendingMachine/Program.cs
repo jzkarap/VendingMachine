@@ -14,13 +14,11 @@ namespace VendingMachine
 		{
 			Dictionary<string, Stack<Item>> stock = GetItems();
 
-			Vendor machine = new Vendor();
-
 			CashCounter cashCounter = new CashCounter();
 
 			Queue<Item> purchases = new Queue<Item>();
 
-			Menu main = new Menu(stock, cashCounter, purchases, machine);
+			Menu main = new Menu(stock, cashCounter, purchases);
 		}
 
 		/// <summary>

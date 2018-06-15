@@ -9,14 +9,17 @@ namespace VendingMachine.UI
 {
 	public class PurchaseMenu
 	{
-		public PurchaseMenu(Dictionary<string, Stack<Item>> stock, CashCounter currentCounter, Queue<Item> purchases, Vendor machine)
+		Vendor machine = new Vendor();
+		
+
+		public PurchaseMenu(Dictionary<string, Stack<Item>> stock, CashCounter cashCounter, Queue<Item> purchases)
 		{
 			Console.Clear();
 
 			Console.WriteLine("(1) Feed Money");
 			Console.WriteLine("(2) Select Product");
 			Console.WriteLine("(3) Finish Transaction");
-			Console.WriteLine($"Current money provided: {currentCounter.Balance:c}");
+			Console.WriteLine($"Current money provided: {cashCounter.Balance:c}");
 
 			string userInput = Console.ReadLine();
 
@@ -46,8 +49,9 @@ namespace VendingMachine.UI
 					userInput = Console.ReadLine();
 				}
 
-				currentCounter.Feed(decimal.Parse(userInput));
-				PurchaseMenu purchase = new PurchaseMenu(stock, currentCounter, purchases, machine);
+				cashCounter.Feed(decimal.Parse(userInput));
+
+				PurchaseMenu purchase = new PurchaseMenu(stock, cashCounter, purchases);
 			}
 
 			// Generates list of current stock,
@@ -77,18 +81,18 @@ namespace VendingMachine.UI
 
 				Console.WriteLine();
 
-				purchases = machine.Transaction(currentCounter, stock, userInput, purchases);
+				purchases = machine.Transaction(cashCounter, stock, userInput, purchases);
 
 				Console.WriteLine("Press Enter to return to purchase menu!");
 
 				Console.ReadLine();
 
-				PurchaseMenu purchase = new PurchaseMenu(stock, currentCounter, purchases, machine);
+				PurchaseMenu purchase = new PurchaseMenu(stock, cashCounter, purchases);
 			}
 
 			if (userInput == "3")
 			{
-				int[] arrayOfChange = currentCounter.GetChange();
+				int[] arrayOfChange = cashCounter.GetChange();
 
 				int quarterCount = arrayOfChange[0];
 				int dimeCount = arrayOfChange[1];
@@ -116,7 +120,7 @@ namespace VendingMachine.UI
 				Console.WriteLine("Thanks for shopping with ComplicatedVending!");
 				Thread.Sleep(800);
 				Console.WriteLine();
-				Menu main = new Menu(stock, currentCounter, purchases, machine);
+				Menu main = new Menu(stock, cashCounter, purchases);
 			}
 
 		}

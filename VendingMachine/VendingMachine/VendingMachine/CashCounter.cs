@@ -10,6 +10,8 @@ namespace VendingMachine.VendingMachine
 {
 	public class CashCounter
 	{
+		private readonly int[] arrayOfChange = new int[3];
+
 		public CashCounter()
 		{
 			Balance = 0;
@@ -39,8 +41,6 @@ namespace VendingMachine.VendingMachine
 		public int[] GetChange()
 		{
 			decimal balanceBeforeChange = -(Balance);
-
-			int[] arrayOfChange = new int[3];
 
 			arrayOfChange[0] = (int)(Balance / (decimal).25);
 			Balance  %= (decimal).25;

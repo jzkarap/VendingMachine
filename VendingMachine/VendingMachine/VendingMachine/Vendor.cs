@@ -8,10 +8,10 @@ namespace VendingMachine.VendingMachine
 {
 	public class Vendor
 	{
-		string itemName;
-		string itemPosition;
-		int itemQuantity;
-		decimal itemCost;
+		private string itemName;
+		private string itemPosition;
+		private int itemQuantity;
+		private decimal itemCost;
 
 		/// <summary>
 		/// Takes user selection, checks against current balance, dispenses item if conditions are accepted

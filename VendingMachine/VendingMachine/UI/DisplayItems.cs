@@ -9,7 +9,7 @@ namespace VendingMachine.UI
 {
     public class DisplayItems
     {
-		public DisplayItems(Dictionary<string, Stack<Item>> slots, CashCounter currentCounter, Queue<Item> purchases)
+		public DisplayItems(Dictionary<string, Stack<Item>> slots, CashCounter currentCounter, Queue<Item> purchases, Vendor machine)
 		{
 			Console.Clear();
 
@@ -28,7 +28,7 @@ namespace VendingMachine.UI
 			Console.WriteLine("\nPress Enter to continue.\n");
 			Console.ReadLine();
 			Console.Clear();
-			Menu main = new Menu(slots, currentCounter, purchases);
+			Menu main = new Menu(slots, currentCounter, purchases, machine);
 		}
 
 	}

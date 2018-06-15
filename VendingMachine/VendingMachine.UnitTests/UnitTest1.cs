@@ -26,11 +26,9 @@ namespace VendingMachine.UnitTests
         {
             CashCounter cashCounter = new CashCounter();
 
-            decimal balance = cashCounter.Balance;
+			cashCounter.Feed(5);
 
-            decimal fedCashBalance = cashCounter.Feed(5);
-
-            Assert.AreEqual(5, fedCashBalance);
+            Assert.AreEqual(5, cashCounter.Balance);
         }
 
         [TestMethod]
@@ -38,76 +36,161 @@ namespace VendingMachine.UnitTests
         {
             CashCounter cashCounter = new CashCounter();
 
-            decimal fedCash = cashCounter.Feed(5);
+            cashCounter.Feed(5);
 
             cashCounter.GetChange();
 
             Assert.AreEqual(0, cashCounter.Balance);
-
-
-
            
         }
         [TestMethod]
         public void Vending_Machine_Test_Charge()
         {
-            Dictionary<string, Stack<Item>> stock = GetItems();
-            Dictionary<string, Stack<Item>> GetItems()
-            {
-                // Creates slots to hold a location & stacks of items
-                Dictionary<string, Stack<Item>> slots = new Dictionary<string, Stack<Item>>();
-                const int ProductName = 1;
-                const int DefaultQuantity = 5;
+			CashCounter cashCounter = new CashCounter();
 
-                try
-                {
-                    using (StreamReader sr = new StreamReader("inventory.txt"))
-                    {
-                        while (!sr.EndOfStream)
-                        {
-                            Stack<Item> stockForSlot = new Stack<Item>();
-                            // Reads each line from inventory.txt
-                            string line = sr.ReadLine();
+			cashCounter.Charge("Barf", "Test", (decimal)3.45);
 
-                            // Splits lines at pipe symbol
-                            string[] itemDetails = line.Split('|');
-
-                            // Generates item
-                            Item itemToVend = new Item(itemDetails[ProductName], decimal.Parse(itemDetails[2]), itemDetails[3]);
-
-                            // Push itemToVend into stack stockPerSlot 5 times
-
-                            for (int i = 0; i < DefaultQuantity; i++)
-                            {
-                                stockForSlot.Push(itemToVend);
-                            }
-
-                            // If slots (which represents a position in vending array)
-                            // does not exist,
-                            // add it
-                            if (!slots.ContainsKey(itemDetails[0]))
-                            {
-                                // Attach current stock for slot to position in vending array
-                                slots.Add(itemDetails[0], stockForSlot);
-                            }
-                        }
-
-                    }
-                }
-                catch (IOException)
-                {
-                    Console.WriteLine("Looks like there is no inventory file available to stock your fake machine!");
-                }
-
-                return slots;
-            }
-            CashCounter cashCounter = new CashCounter();
-
-            decimal fedCash = cashCounter.Feed(5);
-            Queue<Item> purchases = new Queue<Item>();
-            cashCounter.Charge(GetItems(), "A1", purchases);
-
-            Assert.AreEqual((decimal)1.95, cashCounter.Balance);
+			Assert.AreEqual((decimal)0, cashCounter.Balance);
         }
-    }
+
+		/// <summary>
+		/// Tests if item will be added to queue if purchased with sufficient funds
+		/// </summary>
+		[TestMethod]
+		public void Purchase_With_Enough_Cash()
+		{
+			Vendor testVendor = new Vendor();
+
+			CashCounter testCounter = new CashCounter();
+			testCounter.Feed(10);
+
+			Item testItem = new Item("Thing", (decimal)2.25, "Stuff");
+
+			Stack<Item> testStack = new Stack<Item>();
+			testStack.Push(testItem);
+			testStack.Push(testItem);
+			testStack.Push(testItem);
+
+			Dictionary<string, Stack<Item>> testItems = new Dictionary<string, Stack<Item>>();
+			testItems.Add("A1", testStack);
+
+			Queue<Item> testPurchases = new Queue<Item>();
+
+			testVendor.Transaction(testCounter, testItems, "A1", testPurchases);
+
+			Assert.AreEqual(testItem, testPurchases.Dequeue());
+		}
+
+		/// <summary>
+		/// Tests if item will be added to queue if purchased with insufficient funds
+		/// </summary>
+		[TestMethod]
+		public void Purchase_With_Too_Little_Cash()
+		{
+			Vendor testVendor = new Vendor();
+
+			CashCounter testCounter = new CashCounter();
+			testCounter.Feed(1);
+
+			Item testItem = new Item("Thing", (decimal)2.25, "Stuff");
+
+			Stack<Item> testStack = new Stack<Item>();
+			testStack.Push(testItem);
+			testStack.Push(testItem);
+			testStack.Push(testItem);
+
+			Dictionary<string, Stack<Item>> testItems = new Dictionary<string, Stack<Item>>();
+			testItems.Add("A1", testStack);
+
+			Queue<Item> testPurchases = new Queue<Item>();
+
+			testVendor.Transaction(testCounter, testItems, "A1", testPurchases);
+
+			int amountOfItemsInTestList = 0;
+
+			foreach (var kvp in testItems)
+			{
+				amountOfItemsInTestList = kvp.Value.Count;
+			}
+
+			Assert.AreEqual(3, amountOfItemsInTestList);
+			Assert.AreEqual(0, testPurchases.Count);
+		}
+
+		/// <summary>
+		/// Tests if item will be added to queue if purchased with insufficient funds
+		/// </summary>
+		[TestMethod]
+		public void Purchase_With_No_Stock_Remaining()
+		{
+			Vendor testVendor = new Vendor();
+
+			CashCounter testCounter = new CashCounter();
+			testCounter.Feed(100);
+
+			Item testItem = new Item("Thing", (decimal)2.25, "Stuff");
+
+			Stack<Item> testStack = new Stack<Item>();
+			testStack.Push(testItem);
+			testStack.Push(testItem);
+			testStack.Push(testItem);
+
+			Dictionary<string, Stack<Item>> testItems = new Dictionary<string, Stack<Item>>();
+			testItems.Add("A1", testStack);
+
+			Queue<Item> testPurchases = new Queue<Item>();
+
+			testVendor.Transaction(testCounter, testItems, "A1", testPurchases);
+			testVendor.Transaction(testCounter, testItems, "A1", testPurchases);
+			testVendor.Transaction(testCounter, testItems, "A1", testPurchases);
+			testVendor.Transaction(testCounter, testItems, "A1", testPurchases);
+
+			int amountOfItemsInTestList = 0;
+
+			foreach (var kvp in testItems)
+			{
+				amountOfItemsInTestList = kvp.Value.Count;
+			}
+
+			Assert.AreEqual(3, testPurchases.Count);
+			Assert.AreEqual(0, amountOfItemsInTestList);
+		}
+
+		/// <summary>
+		/// Transaction occurs if balance is exact item cost
+		/// </summary>
+		[TestMethod]
+		public void Purchase_With_Exact_Change()
+		{
+			Vendor testVendor = new Vendor();
+
+			CashCounter testCounter = new CashCounter();
+			testCounter.Feed((decimal)1.50);
+
+			Item testItem = new Item("Thing", (decimal)1.50, "Stuff");
+
+			Stack<Item> testStack = new Stack<Item>();
+			testStack.Push(testItem);
+			testStack.Push(testItem);
+			testStack.Push(testItem);
+
+			Dictionary<string, Stack<Item>> testItems = new Dictionary<string, Stack<Item>>();
+			testItems.Add("A1", testStack);
+
+			Queue<Item> testPurchases = new Queue<Item>();
+
+			testVendor.Transaction(testCounter, testItems, "A1", testPurchases);
+
+
+			int amountOfItemsInTestList = 0;
+
+			foreach (var kvp in testItems)
+			{
+				amountOfItemsInTestList = kvp.Value.Count;
+			}
+
+			Assert.AreEqual(1, testPurchases.Count);
+			Assert.AreEqual(2, amountOfItemsInTestList);
+		}
+	}
 }

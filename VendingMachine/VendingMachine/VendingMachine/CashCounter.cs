@@ -10,10 +10,6 @@ namespace VendingMachine.VendingMachine
 {
 	public class CashCounter
 	{
-		int quarterCount;
-		int dimeCount;
-		int nickelCount;
-
 		public CashCounter()
 		{
 			Balance = 0;
@@ -21,61 +17,19 @@ namespace VendingMachine.VendingMachine
 
 		public decimal Balance { get; set; }
 
-		public decimal Feed(decimal fedCash)
+		public void Feed(decimal fedCash)
 		{
 			Balance += fedCash;
 			TransactionRecorder("FEED MONEY:", fedCash);
-
-			return Balance;
 		}
 
-		public Queue<Item> Charge(Dictionary<string, Stack<Item>> stock, string userInput, Queue<Item> purchases)
+		public void Charge(string itemName, string itemPosition, decimal itemCost)
 		{
-			foreach (var kvp in stock)
+			if (Balance - itemCost >= 0)
 			{
-				if (stock.ContainsKey(userInput))
-				{
-					if (userInput.Equals(kvp.Key) &&
-						kvp.Value.Count > 0 &&
-						Balance > kvp.Value.Peek().Cost)
-					{
-						Thread.Sleep(800);
-						Console.WriteLine($"That'll be {kvp.Value.Peek().Cost:c}!");
-						Balance -= kvp.Value.Peek().Cost;
-						Console.WriteLine();
-						Thread.Sleep(1000);
-						Console.WriteLine($"{kvp.Value.Peek().Name} at {kvp.Key} dispensed!");
-						TransactionRecorder($"{kvp.Value.Peek().Name} {kvp.Key}", -(kvp.Value.Peek().Cost));
-						Thread.Sleep(800);
-						Console.WriteLine();
-						purchases.Enqueue(kvp.Value.Pop());
-					}
-					else if (userInput.Equals(kvp.Key) &&
-						kvp.Value.Count > 0 &&
-						Balance < kvp.Value.Peek().Cost)
-					{
-						Thread.Sleep(800);
-						Console.WriteLine("Insufficient funds to buy this item!");
-						Console.WriteLine();
-						break;
-					}
-					else if (userInput == kvp.Key)
-					{
-						Thread.Sleep(800);
-						Console.WriteLine("This item is SOLD OUT!!");
-						Console.WriteLine();
-						break;
-					}
-				}
-				else
-				{
-					Console.WriteLine("Invalid selection!");
-					Console.WriteLine();
-					break;
-				}
+				Balance -= itemCost;
+				TransactionRecorder($"{itemName} {itemPosition}", -(itemCost));
 			}
-
-			return purchases;
 		}
 
 		/// <summary>
@@ -110,6 +64,5 @@ namespace VendingMachine.VendingMachine
 				recorder.WriteLine(DateTime.Now.ToString() + " "  + eventType.PadRight(25) + " " + $"{Balance - cashDelta:c}".PadRight(10) + " " + $"{Balance:c}");
 			}
 		}
-
 	}
 }

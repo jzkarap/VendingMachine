@@ -14,11 +14,13 @@ namespace VendingMachine
 		{
 			Dictionary<string, Stack<Item>> stock = GetItems();
 
+			Vendor machine = new Vendor();
+
 			CashCounter cashCounter = new CashCounter();
 
 			Queue<Item> purchases = new Queue<Item>();
 
-			Menu main = new Menu(stock, cashCounter, purchases);
+			Menu main = new Menu(stock, cashCounter, purchases, machine);
 		}
 
 		/// <summary>
@@ -29,8 +31,13 @@ namespace VendingMachine
 		{
 			// Creates slots to hold a location & stacks of items
 			Dictionary<string, Stack<Item>> slots = new Dictionary<string, Stack<Item>>();
-			const int ProductName = 1;
+
 			const int DefaultQuantity = 5;
+			const int ProductName = 1;
+			const int ProductCost = 2;
+			const int ProductType = 3;
+
+			const int ProductCode = 0;
 
 			try
 			{
@@ -46,7 +53,7 @@ namespace VendingMachine
 						string[] itemDetails = line.Split('|');
 
 						// Generates item
-						Item itemToVend = new Item(itemDetails[ProductName], decimal.Parse(itemDetails[2]), itemDetails[3]);
+						Item itemToVend = new Item(itemDetails[ProductName], decimal.Parse(itemDetails[ProductCost]), itemDetails[ProductType]);
 
 						// Push itemToVend into stack stockPerSlot 5 times
 						
@@ -58,10 +65,10 @@ namespace VendingMachine
 						// If slots (which represents a position in vending array)
 						// does not exist,
 						// add it
-						if (!slots.ContainsKey(itemDetails[0]))
+						if (!slots.ContainsKey(itemDetails[ProductCode]))
 						{
 							// Attach current stock for slot to position in vending array
-							slots.Add(itemDetails[0], stockForSlot);
+							slots.Add(itemDetails[ProductCode], stockForSlot);
 						}
 					}
 

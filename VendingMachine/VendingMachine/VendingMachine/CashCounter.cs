@@ -10,9 +10,9 @@ namespace VendingMachine.VendingMachine
 {
 	public class CashCounter
 	{
-		int quarter;
-		int dime;
-		int nickel;
+		int quarterCount;
+		int dimeCount;
+		int nickelCount;
 
 		public CashCounter()
 		{
@@ -79,22 +79,22 @@ namespace VendingMachine.VendingMachine
 			return purchases;
 		}
 
-		public string GetChange(CashCounter currentCounter)
+		public string GetChange()
 		{
-			decimal balanceBeforeChange = -(currentCounter.Balance);
+			decimal balanceBeforeChange = -(Balance);
 
-			quarter = (int)(Balance / (decimal).25);
+			quarterCount = (int)(Balance / (decimal).25);
 			Balance  %= (decimal).25;
-			dime = (int)(Balance / (decimal).10);
+			dimeCount = (int)(Balance / (decimal).10);
 			Balance %= (decimal).10;
-			nickel = (int)(Balance / (decimal).05);
+			nickelCount = (int)(Balance / (decimal).05);
 			Balance %= (decimal).05;
 
-			int[] arrayOfChange = { quarter, dime, nickel };
+			int[] arrayOfChange = { quarterCount, dimeCount, nickelCount };
 
 			TransactionRecorder("GIVE CHANGE:", balanceBeforeChange);
 
-			return $"Change returned: {arrayOfChange[0]} quarters, {arrayOfChange[1]} dimes, {arrayOfChange[2]} nickels";
+			return $"Change returned: {quarterCount} quarters, {dimeCount} dimes, {nickelCount} nickels";
 		}
 
 
@@ -105,7 +105,7 @@ namespace VendingMachine.VendingMachine
 		{
 			using (StreamWriter recorder = new StreamWriter("log.txt", true))
 			{
-				recorder.WriteLine(DateTime.Now.ToString() + " " + eventType + "\t\t" + $"{Balance - cashDelta:c}" + "\t" + $"{Balance:c}");
+				recorder.WriteLine(DateTime.Now.ToString() + " "  + eventType.PadRight(25) + " " + $"{Balance - cashDelta:c}".PadRight(10) + " " + $"{Balance:c}");
 			}
 		}
 

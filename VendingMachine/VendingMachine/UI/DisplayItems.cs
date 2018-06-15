@@ -17,7 +17,7 @@ namespace VendingMachine.UI
 			{
 				if (kvp.Value.Count > 0)
 				{
-					Console.WriteLine($"{kvp.Key} {kvp.Value.Peek().Name} {kvp.Value.Peek().Cost:c}");
+					Console.WriteLine($"{kvp.Key} {kvp.Value.Peek().Name}".PadRight(25) + $"{kvp.Value.Peek().Cost:c}");
 				}
 				else
 				{

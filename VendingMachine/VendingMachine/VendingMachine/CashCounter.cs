@@ -10,9 +10,9 @@ namespace VendingMachine.VendingMachine
 {
 	public class CashCounter
 	{
-		int quarter;
-		int dime;
-		int nickel;
+		int quarterCount;
+		int dimeCount;
+		int nickelCount;
 
 		public CashCounter()
 		{
@@ -31,7 +31,6 @@ namespace VendingMachine.VendingMachine
 
 		public Queue<Item> Charge(Dictionary<string, Stack<Item>> stock, string userInput, Queue<Item> purchases)
 		{
-
 			foreach (var kvp in stock)
 			{
 				if (stock.ContainsKey(userInput))
@@ -83,20 +82,19 @@ namespace VendingMachine.VendingMachine
 		{
 			decimal balanceBeforeChange = -(currentCounter.Balance);
 
-			quarter = (int)(Balance / (decimal).25);
+			quarterCount = (int)(Balance / (decimal).25);
 			Balance  %= (decimal).25;
-			dime = (int)(Balance / (decimal).10);
+			dimeCount = (int)(Balance / (decimal).10);
 			Balance %= (decimal).10;
-			nickel = (int)(Balance / (decimal).05);
+			nickelCount = (int)(Balance / (decimal).05);
 			Balance %= (decimal).05;
 
-			int[] arrayOfChange = { quarter, dime, nickel };
+			int[] arrayOfChange = { quarterCount, dimeCount, nickelCount };
 
 			TransactionRecorder("GIVE CHANGE:", balanceBeforeChange);
 
-			return $"Change returned: {arrayOfChange[0]} quarters, {arrayOfChange[1]} dimes, {arrayOfChange[2]} nickels";
+			return $"Change returned: {quarterCount} quarters, {dimeCount} dimes, {nickelCount} nickels";
 		}
-
 
 		/// <summary>
 		/// Creates log entry for every change of state within machine

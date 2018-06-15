@@ -15,7 +15,7 @@ namespace VendingMachine.VendingMachine
 			Balance = 0;
 		}
 
-		public decimal Balance { get; set; }
+		public decimal Balance { get; private set; }
 
 		public void Feed(decimal fedCash)
 		{

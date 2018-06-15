@@ -43,6 +43,7 @@ namespace VendingMachine.UnitTests
             Assert.AreEqual(0, cashCounter.Balance);
            
         }
+
         [TestMethod]
         public void Vending_Machine_Test_Charge()
         {

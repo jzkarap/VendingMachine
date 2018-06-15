@@ -46,7 +46,7 @@ namespace VendingMachine.UI
 					userInput = Console.ReadLine();
 				}
 
-				currentCounter.Feed(decimal.Parse(userInput), currentCounter);
+				currentCounter.Feed(decimal.Parse(userInput));
 				PurchaseMenu purchase = new PurchaseMenu(stock, currentCounter, purchases);
 			}
 
@@ -77,7 +77,7 @@ namespace VendingMachine.UI
 
 				Console.WriteLine();
 
-				purchases = currentCounter.Charge(stock, userInput, currentCounter, purchases);
+				purchases = currentCounter.Charge(stock, userInput, purchases);
 
 				Console.WriteLine("Press Enter to return to purchase menu!");
 				Console.ReadLine();
@@ -107,6 +107,7 @@ namespace VendingMachine.UI
 
 				Console.WriteLine("Thanks for shopping with ComplicatedVending!");
 				Thread.Sleep(800);
+				Console.WriteLine();
 				Menu main = new Menu(stock, currentCounter, purchases);
 			}
 

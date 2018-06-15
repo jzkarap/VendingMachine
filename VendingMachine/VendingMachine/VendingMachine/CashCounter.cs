@@ -21,15 +21,15 @@ namespace VendingMachine.VendingMachine
 
 		public decimal Balance { get; set; }
 
-		public decimal Feed(decimal fedCash, CashCounter currentCounter)
+		public decimal Feed(decimal fedCash)
 		{
 			Balance += fedCash;
-			TransactionRecorder("FEED MONEY:", fedCash, currentCounter);
+			TransactionRecorder("FEED MONEY:", fedCash);
 
 			return Balance;
 		}
 
-		public Queue<Item> Charge(Dictionary<string, Stack<Item>> stock, string userInput, CashCounter currentCounter, Queue<Item> purchases)
+		public Queue<Item> Charge(Dictionary<string, Stack<Item>> stock, string userInput, Queue<Item> purchases)
 		{
 
 			foreach (var kvp in stock)
@@ -38,22 +38,22 @@ namespace VendingMachine.VendingMachine
 				{
 					if (userInput.Equals(kvp.Key) &&
 						kvp.Value.Count > 0 &&
-						currentCounter.Balance > kvp.Value.Peek().Cost)
+						Balance > kvp.Value.Peek().Cost)
 					{
 						Thread.Sleep(800);
 						Console.WriteLine($"That'll be {kvp.Value.Peek().Cost:c}!");
-						currentCounter.Balance -= kvp.Value.Peek().Cost;
+						Balance -= kvp.Value.Peek().Cost;
 						Console.WriteLine();
 						Thread.Sleep(1000);
 						Console.WriteLine($"{kvp.Value.Peek().Name} at {kvp.Key} dispensed!");
-						TransactionRecorder($"{kvp.Value.Peek().Name} {kvp.Key}", -(kvp.Value.Peek().Cost), currentCounter);
+						TransactionRecorder($"{kvp.Value.Peek().Name} {kvp.Key}", -(kvp.Value.Peek().Cost));
 						Thread.Sleep(800);
 						Console.WriteLine();
 						purchases.Enqueue(kvp.Value.Pop());
 					}
 					else if (userInput.Equals(kvp.Key) &&
 						kvp.Value.Count > 0 &&
-						currentCounter.Balance < kvp.Value.Peek().Cost)
+						Balance < kvp.Value.Peek().Cost)
 					{
 						Thread.Sleep(800);
 						Console.WriteLine("Insufficient funds to buy this item!");
@@ -92,7 +92,7 @@ namespace VendingMachine.VendingMachine
 
 			int[] arrayOfChange = { quarter, dime, nickel };
 
-			TransactionRecorder("GIVE CHANGE:", balanceBeforeChange, currentCounter);
+			TransactionRecorder("GIVE CHANGE:", balanceBeforeChange);
 
 			return $"Change returned: {arrayOfChange[0]} quarters, {arrayOfChange[1]} dimes, {arrayOfChange[2]} nickels";
 		}
@@ -101,11 +101,11 @@ namespace VendingMachine.VendingMachine
 		/// <summary>
 		/// Creates log entry for every change of state within machine
 		/// </summary>
-		public void TransactionRecorder(string eventType, decimal cashDelta, CashCounter currentCounter)
+		private void TransactionRecorder(string eventType, decimal cashDelta)
 		{
 			using (StreamWriter recorder = new StreamWriter("log.txt", true))
 			{
-				recorder.WriteLine(DateTime.Now.ToString() + " " + eventType + "\t\t" + $"{currentCounter.Balance - cashDelta:c}" + "\t" + $"{currentCounter.Balance:c}");
+				recorder.WriteLine(DateTime.Now.ToString() + " " + eventType + "\t\t" + $"{Balance - cashDelta:c}" + "\t" + $"{Balance:c}");
 			}
 		}
 

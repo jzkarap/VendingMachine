@@ -25,10 +25,12 @@ namespace VendingMachine
 		/// Reads an inventory file and interprets for program
 		/// </summary>
 		/// <returns>The initial composition of machine + inventory</returns>
-		static Dictionary<string, Stack<Item>> GetItems()
+		private static Dictionary<string, Stack<Item>> GetItems()
 		{
 			// Creates slots to hold a location & stacks of items
 			Dictionary<string, Stack<Item>> slots = new Dictionary<string, Stack<Item>>();
+			const int ProductName = 1;
+			const int DefaultQuantity = 5;
 
 			try
 			{
@@ -44,10 +46,11 @@ namespace VendingMachine
 						string[] itemDetails = line.Split('|');
 
 						// Generates item
-						Item itemToVend = new Item(itemDetails[1], decimal.Parse(itemDetails[2]), itemDetails[3]);
+						Item itemToVend = new Item(itemDetails[ProductName], decimal.Parse(itemDetails[2]), itemDetails[3]);
 
 						// Push itemToVend into stack stockPerSlot 5 times
-						for (int i = 0; i < 5; i++)
+						
+						for (int i = 0; i < DefaultQuantity; i++)
 						{
 							stockForSlot.Push(itemToVend);
 						}

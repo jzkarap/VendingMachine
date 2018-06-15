@@ -86,7 +86,13 @@ namespace VendingMachine.UI
 
 			if (userInput == "3")
 			{
-				Console.WriteLine(currentCounter.GetChange());
+				int[] arrayOfChange = currentCounter.GetChange();
+
+				int quarterCount = arrayOfChange[0];
+				int dimeCount = arrayOfChange[1];
+				int nickelCount = arrayOfChange[2];
+
+				Console.WriteLine($"Change returned: {quarterCount} quarters, {dimeCount} dimes, {nickelCount} nickels");
 				Console.WriteLine();
 				Console.Write(".");
 				Thread.Sleep(300);

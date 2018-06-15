@@ -78,22 +78,26 @@ namespace VendingMachine.VendingMachine
 			return purchases;
 		}
 
-		public string GetChange()
+		/// <summary>
+		/// Calculates amount of change in quarters, dimes, and nickels 
+		/// </summary>
+		/// <returns>An array of the number of each type of coin</returns>
+		public int[] GetChange()
 		{
 			decimal balanceBeforeChange = -(Balance);
 
-			quarterCount = (int)(Balance / (decimal).25);
-			Balance  %= (decimal).25;
-			dimeCount = (int)(Balance / (decimal).10);
-			Balance %= (decimal).10;
-			nickelCount = (int)(Balance / (decimal).05);
-			Balance %= (decimal).05;
+			int[] arrayOfChange = new int[3];
 
-			int[] arrayOfChange = { quarterCount, dimeCount, nickelCount };
+			arrayOfChange[0] = (int)(Balance / (decimal).25);
+			Balance  %= (decimal).25;
+			arrayOfChange[1] = (int)(Balance / (decimal).10);
+			Balance %= (decimal).10;
+			arrayOfChange[2] = (int)(Balance / (decimal).05);
+			Balance %= (decimal).05;
 
 			TransactionRecorder("GIVE CHANGE:", balanceBeforeChange);
 
-			return $"Change returned: {quarterCount} quarters, {dimeCount} dimes, {nickelCount} nickels";
+			return arrayOfChange;
 		}
 
 		/// <summary>

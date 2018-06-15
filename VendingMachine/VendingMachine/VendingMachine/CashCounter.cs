@@ -29,9 +29,8 @@ namespace VendingMachine.VendingMachine
 			return Balance;
 		}
 
-		public Queue<Item> Charge(Dictionary<string, Stack<Item>> stock, string userInput, CashCounter currentCounter)
+		public Queue<Item> Charge(Dictionary<string, Stack<Item>> stock, string userInput, CashCounter currentCounter, Queue<Item> purchases)
 		{
-			Queue<Item> purchases = new Queue<Item>();
 
 			foreach (var kvp in stock)
 			{
@@ -106,7 +105,7 @@ namespace VendingMachine.VendingMachine
 		{
 			using (StreamWriter recorder = new StreamWriter("log.txt", true))
 			{
-				recorder.WriteLine(DateTime.Now.ToString() + " " + eventType + "\t" + $"{currentCounter.Balance - cashDelta:c}" + "\t" + $"{currentCounter.Balance:c}");
+				recorder.WriteLine(DateTime.Now.ToString() + " " + eventType + "\t\t" + $"{currentCounter.Balance - cashDelta:c}" + "\t" + $"{currentCounter.Balance:c}");
 			}
 		}
 

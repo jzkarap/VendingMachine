@@ -9,7 +9,7 @@ namespace VendingMachine.UI
 {
 	public class PurchaseMenu
 	{
-		public PurchaseMenu(Dictionary<string, Stack<Item>> stock, CashCounter currentCounter)
+		public PurchaseMenu(Dictionary<string, Stack<Item>> stock, CashCounter currentCounter, Queue<Item> purchases)
 		{
 			Console.Clear();
 
@@ -47,7 +47,7 @@ namespace VendingMachine.UI
 				}
 
 				currentCounter.Feed(decimal.Parse(userInput), currentCounter);
-				PurchaseMenu purchase = new PurchaseMenu(stock, currentCounter);
+				PurchaseMenu purchase = new PurchaseMenu(stock, currentCounter, purchases);
 			}
 
 			// Generates list of current stock,
@@ -77,11 +77,11 @@ namespace VendingMachine.UI
 
 				Console.WriteLine();
 
-				currentCounter.Charge(stock, userInput, currentCounter);
+				purchases = currentCounter.Charge(stock, userInput, currentCounter, purchases);
 
 				Console.WriteLine("Press Enter to return to purchase menu!");
 				Console.ReadLine();
-				PurchaseMenu purchase = new PurchaseMenu(stock, currentCounter);
+				PurchaseMenu purchase = new PurchaseMenu(stock, currentCounter, purchases);
 			}
 
 			if (userInput == "3")
@@ -97,6 +97,17 @@ namespace VendingMachine.UI
 				Console.Write(".");
 				Thread.Sleep(300);
 				Console.Clear();
+
+				while(purchases.Count > 0)
+				{
+					Item currentItem = purchases.Dequeue();
+					Console.WriteLine(currentItem.Noise());
+					Thread.Sleep(800);
+				}
+
+				Console.WriteLine("Thanks for shopping with ComplicatedVending!");
+				Thread.Sleep(800);
+				Menu main = new Menu(stock, currentCounter, purchases);
 			}
 
 		}

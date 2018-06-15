@@ -16,10 +16,9 @@ namespace VendingMachine
 
 			CashCounter cashCounter = new CashCounter();
 
-			// Creates a group of items to be purchased
-			Stack<Item> purchases = new Stack<Item>();
+			Queue<Item> purchases = new Queue<Item>();
 
-			Menu main = new Menu(stock, cashCounter);
+			Menu main = new Menu(stock, cashCounter, purchases);
 		}
 
 		/// <summary>

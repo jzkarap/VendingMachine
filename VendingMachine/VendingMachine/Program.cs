@@ -19,23 +19,7 @@ namespace VendingMachine
 			// Creates a group of items to be purchased
 			Stack<Item> purchases = new Stack<Item>();
 
-			// Transaction testing
-			//Console.WriteLine("Testing initial balance: " + cashCounter.Balance);
-			//cashCounter.Feed((decimal)5.05);
-			//cashCounter.Charge(stock["A1"].Pop().Cost);
-			//cashCounter.Charge(stock["A1"].Pop().Cost);
-			//cashCounter.Charge(stock["A1"].Pop().Cost);
-			//cashCounter.Charge(stock["A1"].Pop().Cost);
-			//cashCounter.Charge(stock["A1"].Pop().Cost);
-			//Console.WriteLine($"Testing updated balance: {cashCounter.Balance:c}");
-			//Console.WriteLine(cashCounter.GetChange());
-			//Console.WriteLine($"{cashCounter.Balance:c}");
-			//Console.WriteLine();
-
 			Menu main = new Menu(stock, cashCounter);
-
-			// Testing transaction recorder
-			TransactionRecorder();
 		}
 
 		/// <summary>
@@ -88,16 +72,6 @@ namespace VendingMachine
 
 			return slots;
 		}
-		
-		/// <summary>
-		/// BROKEN
-		/// </summary>
-		static void TransactionRecorder()
-		{
-			using (StreamWriter recorder = new StreamWriter("log.txt", true))
-			{
-				recorder.WriteLine(DateTime.Now.ToString());
-			}
-		}
+
 	}
 }

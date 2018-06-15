@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using VendingMachine.Items;
 using VendingMachine.VendingMachine;
 
@@ -19,6 +20,7 @@ namespace VendingMachine.UI
 
 			string userInput = Console.ReadLine();
 
+			// Prompts user for valid menu selection
 			while (userInput != "1" &&
 					userInput != "2" &&
 					userInput != "3")
@@ -27,6 +29,8 @@ namespace VendingMachine.UI
 				userInput = Console.ReadLine();
 			}
 
+			// Prompts user to enter whole dollar amount $1-10
+			// Does not allow invalid input
 			if (userInput == "1")
 			{
 				Console.WriteLine();
@@ -42,10 +46,13 @@ namespace VendingMachine.UI
 					userInput = Console.ReadLine();
 				}
 
-				currentCounter.Balance += decimal.Parse(userInput);
+				currentCounter.Feed(decimal.Parse(userInput), currentCounter);
 				PurchaseMenu purchase = new PurchaseMenu(stock, currentCounter);
 			}
 
+			// Generates list of current stock,
+			// Gets user selection,
+			// Calls CashCounter.Charge function
 			if (userInput == "2")
 			{
 				Console.Clear();
@@ -54,7 +61,7 @@ namespace VendingMachine.UI
 				{
 					if (kvp.Value.Count > 0)
 					{
-						Console.WriteLine(kvp.Key + " " + kvp.Value.Peek().Name + " " + kvp.Value.Peek().Cost);
+						Console.WriteLine($"{kvp.Key} {kvp.Value.Peek().Name} {kvp.Value.Peek().Cost:c}");
 					}
 					else
 					{
@@ -70,37 +77,27 @@ namespace VendingMachine.UI
 
 				Console.WriteLine();
 
-				foreach (var kvp in stock)
-				{
-					if (stock.ContainsKey(userInput))
-					{
-						if (userInput.Equals(kvp.Key) &&
-							kvp.Value.Count > 0)
-						{
-							currentCounter.Charge(kvp.Value.Peek().Cost);
-							Console.WriteLine($"Item {kvp.Key} dispensed!");
-							kvp.Value.Pop();
-						}
-						else if (userInput == kvp.Key &&
-							kvp.Value.Count == 0)
-						{
-							Console.WriteLine("This item is SOLD OUT!!");
-							break;
-						}
-					}
-					else
-					{
-						// ITEM POPPED HAS TO GO TO PURCHASED LIST -- FIGURE OUT HOW TO MOVE THS AROUND
-						Console.WriteLine("Please select a valid selection!");
-						break;
-					}
-				}
+				currentCounter.Charge(stock, userInput, currentCounter);
 
 				Console.WriteLine("Press Enter to return to purchase menu!");
 				Console.ReadLine();
 				PurchaseMenu purchase = new PurchaseMenu(stock, currentCounter);
 			}
 
+			if (userInput == "3")
+			{
+				Console.WriteLine(currentCounter.GetChange(currentCounter));
+				Console.WriteLine();
+				Console.Write(".");
+				Thread.Sleep(300);
+				Console.Write(".");
+				Thread.Sleep(300);
+				Console.Write(".");
+				Thread.Sleep(300);
+				Console.Write(".");
+				Thread.Sleep(300);
+				Console.Clear();
+			}
 
 		}
 	}

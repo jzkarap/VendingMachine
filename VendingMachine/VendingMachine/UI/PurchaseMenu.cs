@@ -10,7 +10,7 @@ namespace VendingMachine.UI
 	public class PurchaseMenu
 	{
 		Vendor machine = new Vendor();
-		
+
 
 		public PurchaseMenu(Dictionary<string, Stack<Item>> stock, CashCounter cashCounter, Queue<Item> purchases)
 		{
@@ -83,6 +83,9 @@ namespace VendingMachine.UI
 
 				purchases = machine.Transaction(cashCounter, stock, userInput, purchases);
 
+				// Could make this prompt user for valid input instead of kicking them back to Purchase menu--
+				// But directions state to return to Purchase menu...
+				// ... How closely are we meant to follow the script?
 				Console.WriteLine("Press Enter to return to purchase menu!");
 
 				Console.ReadLine();
@@ -110,7 +113,7 @@ namespace VendingMachine.UI
 				Thread.Sleep(300);
 				Console.Clear();
 
-				while(purchases.Count > 0)
+				while (purchases.Count > 0)
 				{
 					Item currentItem = purchases.Dequeue();
 					Console.WriteLine(currentItem.Noise());

@@ -7,9 +7,9 @@ using VendingMachine.VendingMachine;
 
 namespace VendingMachine.UI
 {
-    public class DisplayItems
+    public class DisplayItemsMenu
     {
-		public DisplayItems(Dictionary<string, Stack<Item>> slots, CashCounter cashCounter, Queue<Item> purchases)
+		public void Run(Dictionary<string, Stack<Item>> slots, CashCounter cashCounter, Queue<Item> purchases)
 		{
 			Console.Clear();
 
@@ -28,7 +28,7 @@ namespace VendingMachine.UI
 			Console.WriteLine("\nPress Enter to continue.\n");
 			Console.ReadLine();
 			Console.Clear();
-			Menu main = new Menu(slots, cashCounter, purchases);
+			//Menu main = new Menu(slots, cashCounter, purchases);
 		}
 
 	}

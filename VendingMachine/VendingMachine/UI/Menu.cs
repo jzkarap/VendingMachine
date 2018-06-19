@@ -10,25 +10,34 @@ namespace VendingMachine.UI
 	{
 		public Menu(Dictionary<string, Stack<Item>> slots, CashCounter cashCounter, Queue<Item> purchases)
 		{
-			Console.WriteLine("(1) Display Vending Machine Items");
-			Console.WriteLine("(2) Purchase");
+            while (true)
+            {
+                Console.WriteLine("(1) Display Vending Machine Items");
+                Console.WriteLine("(2) Purchase");
+                Console.WriteLine("(Q) Quit");
 
-			string userInput = Console.ReadLine();
+                string userInput = Console.ReadLine();
 
-			while (userInput != "1" &&
-				   userInput != "2")
-			{
-				Console.WriteLine("Please select option 1 or option 2!");
-				userInput = Console.ReadLine();
-			}
-			if (userInput == "1")
-			{
-				DisplayItems items = new DisplayItems(slots, cashCounter, purchases);
-			}
-			if (userInput == "2")
-			{
-				PurchaseMenu purchase = new PurchaseMenu(slots, cashCounter, purchases);
-			}
+                while (userInput != "1" &&
+                       userInput != "2")
+                {
+                    Console.WriteLine("Please select option 1 or option 2!");
+                    userInput = Console.ReadLine();
+                }
+                if (userInput == "1")
+                {
+                    DisplayItemsMenu items = new DisplayItemsMenu();
+                    items.Run(slots, cashCounter, purchases);
+                }
+                if (userInput == "2")
+                {
+                    PurchaseMenu purchase = new PurchaseMenu(slots, cashCounter, purchases);
+                }
+                if (userInput == "Q")
+                {
+                    break;
+                }
+            }
 		}
 
 	}
